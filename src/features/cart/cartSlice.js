@@ -1,3 +1,4 @@
+// Slice as a feature.
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
