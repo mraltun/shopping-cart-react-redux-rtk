@@ -1,8 +1,10 @@
 // Slice as a feature.
 import { createSlice } from "@reduxjs/toolkit";
+// Temporary data from a file
+import cartItems from "../../data/cartItems";
 
 const initialState = {
-  cartItems: [],
+  cartItems: cartItems,
   amount: 0,
   total: 0,
   isLoading: true,
