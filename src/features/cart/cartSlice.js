@@ -13,7 +13,16 @@ const initialState = {
 const cartSlice = createSlice({
   name: "cart",
   initialState,
+  reducers: {
+    clearCart: (state) => {
+      // We don't need to return new state and we always avoid the mutation. We can mutate state here due to RTK (Immer)
+      state.cartItems = [];
+    },
+  },
 });
+
+// We don't need to set any actions and action creators
+export const { clearCart } = cartSlice.actions;
 
 // Export the slice's reducer property
 export default cartSlice.reducer;
