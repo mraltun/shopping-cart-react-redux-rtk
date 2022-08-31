@@ -1,7 +1,10 @@
 // Slice as a feature.
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // Temporary data from a file
 import cartItems from "../../data/cartItems";
+
+// Data from aPI
+const url = "https://course-api.com/react-useReducer-cart-project";
 
 const initialState = {
   cartItems: cartItems,
@@ -9,6 +12,13 @@ const initialState = {
   total: 0,
   isLoading: true,
 };
+
+// First part is action type, second part is callback function which needs to return promise
+export const getCartItems = createAsyncThunk("cart/getCartItems", () => {
+  return fetch(url)
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+});
 
 const cartSlice = createSlice({
   name: "cart",
@@ -18,7 +28,7 @@ const cartSlice = createSlice({
       // We don't need to return new state and we always avoid the mutation. We can mutate state here due to RTK (Immer)
       state.cartItems = [];
     },
-    // Action has type and payload properties
+    // Action has "type" and "payload" properties
     removeItem: (state, action) => {
       const itemId = action.payload;
       state.cartItems = state.cartItems.filter((item) => item.id !== itemId);
@@ -44,9 +54,22 @@ const cartSlice = createSlice({
       state.total = total;
     },
   },
+  // Lifecycle actions
+  extraReducers: {
+    [getCartItems.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getCartItems.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.cartItems = action.payload;
+    },
+    [getCartItems.rejected]: (state) => {
+      state.isLoading = false;
+    },
+  },
 });
 
-// We don't need to set any actions and action creators
+// We don't need to set any actions and action creators, they are set up automatically by createSlice
 export const { clearCart, removeItem, increase, decrease, calculateTotals } =
   cartSlice.actions;
 
