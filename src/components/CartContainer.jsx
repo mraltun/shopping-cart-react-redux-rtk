@@ -7,7 +7,7 @@ const CartContainer = () => {
   const dispatch = useDispatch();
   const { cartItems, total, amount } = useSelector((state) => state.cart);
 
-  // Show an empty bag if no items in the state
+  // Show an empty bag if no items in the state.
   if (amount < 1) {
     return (
       <section className='cart'>
